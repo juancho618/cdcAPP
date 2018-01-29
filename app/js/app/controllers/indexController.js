@@ -2,12 +2,30 @@ app.controller('indexCtrl',[ 'importMatrix', 'createAssignorList', 'createFolder
     let self = this;
     const http = require('http');
     const fs = require('fs.extra');
+
+
+    const remote = require('electron').remote;
+
+    const window = remote.getCurrentWindow();
+    console.log(window);
+    // window.loadURL(`${__dirname}/new.html`);
     
-    self.importMatrix = () =>  importMatrix.end(); 
+    self.load = false;
+    
+    self.switchLoad = () => self.load = false;
+    self.importMatrix = () =>  {
+        self.load = true;
+        result = importMatrix.end();
+        if (result == 1){
+            console.log('hola');
+            // self.switchLoad(); 
+        }
+    }; 
     self.createList = () =>  createAssignorList(); 
     self.createFolder = () => createFolders();
     self.validate = () => validateData();
     self.hi = () => {console.log('aloha')};
+    self.assignorList = () => window.loadURL(`${__dirname}/assignorList.html`);
     
     self.validationSteps = [
         {buttonValue: 'Import Matrix', action: self.importMatrix},

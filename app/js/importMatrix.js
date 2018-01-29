@@ -24,6 +24,7 @@ app.factory('importMatrix', function(){
           res.on('end', () => {
             fs.writeFileSync(savePath, data, 'base64');
             console.log('Matrix saved.');
+            return 1;
           });
     
     });
