@@ -6,15 +6,24 @@
     <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
   </head>
   <body ng-app="cdcAPP">
-    <h1>Documents!</h1>
-    <div ng-controller="indexCtrl as index" ng-click="index.hi()">
-      <md-button toggle-insert-view class="md-raised">add</md-button>
+    <div layout='column' ng-controller="indexCtrl as index">
+      <h1>Documents Preparation</h1>
+      <md-content>
+        <md-list flex>
+         <md-list-item ng-repeat='button in index.validationSteps'>
+            <span>{{$index + 1}}</span> <md-button class="md-raised" ng-click="button.action()">{{button.buttonValue}}</md-button>
+          </md-list-item>
+        </md-list>
+      </md-content>
+        
+        <!-- <div ng-click="index.hi()">
+          <md-button toggle-insert-view class="md-raised">add</md-button>
+        </div> -->
+        <!-- All of the Node.js APIs are available in this renderer process. -->
+        <!-- We are using Node.js <script>document.write(process.versions.node)</script>,
+        Chromium <script>document.write(process.versions.chrome)</script>,
+        and Electron <script>document.write(process.versions.electron)</script>. -->
     </div>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
-
     <script>
       // You can also require other files to run in this process
       require('../renderer.js')
@@ -22,9 +31,13 @@
     <script src="../node_modules/angular/angular.js"></script>
     <script src="../node_modules/angular-aria/angular-aria.js"></script> 
     <script src="../node_modules/angular-animate/angular-animate.js"></script> 
-    <script src="../node_modules/angular-material/angular-material.js"></script> 
+    <script src="../node_modules/angular-material/angular-material.js"></script>    
     <script src="./js/app/app.js"></script> 
-    <script src="./js/index.js"></script>
+    <script src="./js/index.js"></script>    
+    <script src="./js/importMatrix.js"></script>    
+    <script src="./js/createAssignorList.js"></script> 
+    <script src="./js/createFolders.js"></script>   
+    <script src="./js/validateData.js"></script>   
     <script src="./js/app/controllers/indexController.js"></script> 
   </body>
 </html>

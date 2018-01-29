@@ -1,3 +1,1 @@
-(function sayHi(){
-    console.log('hi');
-})();
+let greet = () => console.log('saludo');
