@@ -1,4 +1,4 @@
-app.controller('indexCtrl',[ 'importMatrix', 'createAssignorList', 'createFolders', 'validateData',function(importMatrix, createAssignorList, createFolders, validateData) {
+app.controller('indexCtrl',[ 'importMatrix', 'createAssignorList', 'createPreAssignorList', 'createFolders', 'validateData', 'repeatedDocuments', 'validatePreAssignorData',function(importMatrix, createAssignorList, createPreAssignorList, createFolders, validateData, repeatedDocuments, validatePreAssignorData) {
     let self = this;
     const http = require('http');
     const fs = require('fs.extra');
@@ -21,18 +21,24 @@ app.controller('indexCtrl',[ 'importMatrix', 'createAssignorList', 'createFolder
             // self.switchLoad(); 
         }
     }; 
+
     self.createList = () =>  createAssignorList(); 
+    self.createPreAssignorsList = () => createPreAssignorList();
     self.createFolder = () => createFolders();
     self.validate = () => validateData();
+    self.validatePre = () => validatePreAssignorData();
+    self.repeated = () => repeatedDocuments();
     self.hi = () => {console.log('aloha')};
     self.assignorList = () => window.loadURL(`${__dirname}/assignorList.html`);
     
     self.validationSteps = [
         {buttonValue: 'Import Matrix', action: self.importMatrix},
         {buttonValue: 'Create List of Assignors', action: self.createList},
+        {buttonValue: 'Create List of Pre-Assignors', action: self.createPreAssignorsList},
         {buttonValue: 'Create folder with documents', action: self.createFolder },
         {buttonValue: 'Validate documents', action: self.validate},
-        {buttonValue: 'Check for repeated values', action: 'repeated'}
+        {buttonValue: 'Check for repeated values', action: self.repeated},
+        {buttonValue: 'Validate Pre-Assignor Documents', action: self.validatePre}
     ]
         
     

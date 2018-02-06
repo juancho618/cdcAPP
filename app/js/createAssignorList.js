@@ -9,8 +9,17 @@ app.factory('createAssignorList', function(){
         let xlData = XLSX.utils.sheet_to_json(workbook.Sheets["Tabelle1"]);
 
         let newAssignors = xlData.filter(assignor => {
-            
-            if ( assignor.hasOwnProperty('company_name') && assignor.hasOwnProperty('signdate_CDC_CPA ')  && assignor.hasOwnProperty('signdate_assig_CPA') ) { //other val: && !assignor.signdate_CDC_DoT.includes('still open') assignor.hasOwnProperty('signdate_CDC_DoT') && assignor.hasOwnProperty('signdate_assig_DoT')
+
+            //test
+            if (assignor.hasOwnProperty('Assignor_Number') ){
+                if (assignor['Assignor_Number'] ==398){
+                    console.log(assignor);
+                }
+                
+
+            }
+            const CPA = assignor.hasOwnProperty('signdate_CDC_CPA ')  && assignor.hasOwnProperty('signdate_assig_CPA');
+            if ( assignor.hasOwnProperty('company_name') && CPA && assignor.hasOwnProperty('Assignor_Number') && assignor['Assignor_Number'] != 0) { //other val: && !assignor.signdate_CDC_DoT.includes('still open') assignor.hasOwnProperty('signdate_CDC_DoT') && assignor.hasOwnProperty('signdate_assig_DoT')
             //   if ( assignor.hasOwnProperty('Assig_included_in_writ') ){
             //         if (!assignor.Assig_included_in_writ.toUpperCase().includes('YES')){
             //             return assignor;
@@ -23,7 +32,7 @@ app.factory('createAssignorList', function(){
                 const cpaAssignorDate = (assignor['signdate_assig_CPA'].includes('17') || assignor['signdate_assig_CPA'].includes('18'));
                 if ( cpaCdcDate &&  cpaAssignorDate){
                     if ( assignor.hasOwnProperty('Included_by_writ_of')){
-                        console.log(assignor['Included_by_writ_of']);
+                        // console.log(assignor['Included_by_writ_of']);
                         if (assignor.Included_by_writ_of.toUpperCase().includes('DEC')){
                                         return assignor;
                         }
