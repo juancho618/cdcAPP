@@ -20,12 +20,15 @@
     "electron": "^3.0.0-beta.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@fortawesome/fontawesome-free": "^5.1.0",
     "angular": "^1.6.8",
     "angular-animate": "^1.6.8",
     "angular-aria": "^1.7.2",
     "angular-material": "^1.1.6",
     "animate": "^1.0.0",
     "font-awesome": "^4.7.0",
+    "json2xls": "^0.1.2",
     "xlsx": "^0.13.1"
   }
 }

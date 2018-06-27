@@ -3,7 +3,7 @@
 
 <head>
     <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
-    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css" />
 </head>
 
 <body ng-app="cdcAPP">
@@ -12,16 +12,21 @@
             <label>Directory Path</label>
             <input ng-model="vm.path">
         </md-input-container>
-        <md-chips ng-model="vm.extensionList" name="extensionList" readonly="false" ng-change="vm.listChange(vm.extensionList)" md-removable="true" md-max-chips="5">
+        <md-chips ng-model="vm.tempExtensionList" name="extensionList" readonly="false" ng-change="vm.listChange(vm.tempExtensionList)" md-removable="true" md-max-chips="5">
             <md-chip-template>
                 <strong>{{$chip}}</strong>
             </md-chip-template>
         </md-chips>
         <md-button class="md-primary md-raised" ng-click="vm.getDocumentsList()">Get list of documents</md-button>
-        <md-button class="md-primary md-raised" ng-click="vm.getDocumentsList()">Save list as Excel file</md-button>
+        <md-button class="md-primary md-raised" ng-click="vm.saveList()">Save list as an Excel file</md-button>
         <md-list flex>
+            <div>
+                <h4>{{vm.fileList.length}} files found</h4>
+            </div>           
             <md-list-item class="md-3-line" ng-repeat="file in vm.fileList" ng-click="null">
-                <!-- <md-icom class="fa fa-file"></md-icom> -->
+                <md-button class="md-fab md-mini" ng-disabled="true"> 
+                    <md-icon md-font-icon="{{file.icon}}"></md-icon>
+                </md-button>
                 <div class="md-list-item-text" layout="column">
                     <h3>{{ file.name }}</h3>
                 </div>
@@ -35,6 +40,7 @@
     <script src="../node_modules/angular-material/angular-material.js"></script>
     <script src="./js/app/app.js"></script>
     <script src="./js/app/controllers/documentListController.js"></script>
+    <!-- <script src=".../node_modules/@fortawesome/fontawesome/index.js"></script> -->
 </body>
 
 </html>

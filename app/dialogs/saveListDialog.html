@@ -1,0 +1,24 @@
+<md-dialog aria-label="save">
+    <div layout="column" flex>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2>Save list as Excel</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="cancel()">
+                    <md-icon md-font-icon="fas fa-times" aria-label="Close dialog"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content layout="column">
+            <md-input-container>
+                <label>File name</label>
+                <input ng-model="saveParameters.name">
+            </md-input-container>
+            <md-input-container>
+                <label>Save in (path)</label>
+                <input ng-model="saveParameters.path">
+            </md-input-container>
+            <md-button class="md-primary md-raised" ng-click="save()">Save</md-button>
+        </md-dialog-content>
+    </div>
+</md-dialog>

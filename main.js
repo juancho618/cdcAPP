@@ -5,23 +5,27 @@ const path = require('path');
 const url = require('url');
 
 const directory = require('./app/modules/directory');
+const excel = require('./app/modules/excel');
+
+//TODO: to be deleted
 ipcMain.on('asynchronous-message', (event, arg) => {
   console.log(arg) // prints "ping"
   event.sender.send('asynchronous-reply', 'pong')
 })
 
 //To get the list of documents in a durectory
-ipcMain.on('getFilesInDirectory', (event,arg) => {
+ipcMain.on('getFilesInDirectory', (event,arg) => {  
   const dir = new directory();
   dir.read(arg);  
-  event.sender.send('getFilesInDirectory-response', dir.files);
-  
-  // const values =  fileList.readDirectory(arg);
-  // fileList.readDirectory(arg, (err, res) => {
-  //   if (err) return console.log(err);
-  //     console.log('second', res);
-  // });
-  
+  event.sender.send('getFilesInDirectory-response', dir.files);  
+});
+
+//save the list of documents as an Excel file
+ipcMain.on('saveListExcel', (event,arg) => {
+  console.log('received data', arg);
+  const exc = new excel();
+  exc.saveList(arg);  
+  //vent.sender.send('saveListExcel-response', 'done');  
 });
 
 // Keep a global reference of the window object, if you don't, the window will
