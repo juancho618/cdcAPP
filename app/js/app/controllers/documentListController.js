@@ -49,15 +49,47 @@ app.controller('documentListController', function($scope, $mdDialog) {
                     file.icon = "fas fa-file";
                         break;
             }
+            self.tempList =  Object.assign([], self.fileList);
             return file;
         })
     }
 
     self.listChange = (list) =>{
-        console.log('the list changed', list, self.tempExtensionList);
-        self.fileList = self.fileList.filter(file => list.includes(file.ext));
+        self.tempList  = self.fileList.filter(file => list.includes(file.ext));
     }
 
+    self.openFile =  (file) =>{
+        if (file){
+            //self.openLoading();
+            console.log('opening a file', file);
+            if (file.ext == 'directory'){
+                 ipcRenderer.send('openDocument', self.path);
+            } else {
+                 ipcRenderer.send('openDocument', `${self.path}/${file.name}`);
+            }
+            
+        }       
+    }
+    self.greet = () => {
+        console.log('hey there');
+    }
+
+    //Loader dialog
+    self.openLoading = (ev) => {
+        $mdDialog.show({
+            controller: DialogController,
+            templateUrl: './dialogs/loaderDialog.html',
+            parent: angular.element(document.body),
+            targetEvent: ev,
+            clickOutsideToClose:true,
+            fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+          })
+          .then(function(arg) {
+            //$scope.status = 'You said the information was "' + answer + '".';
+          }, function() {
+            //$scope.status = 'You cancelled the dialog.';
+          });
+    }
     //Dialog when excel list is being save
     self.showAdvanced = function(ev) {
         $mdDialog.show({
@@ -66,7 +98,7 @@ app.controller('documentListController', function($scope, $mdDialog) {
           parent: angular.element(document.body),
           targetEvent: ev,
           clickOutsideToClose:true,
-          fullscreen: $scope.customFullscreen // Only for -xs, -sm breakpoints.
+          fullscreen: $scope.customFullscreen 
         })
         .then(function(arg) {
             if (arg.name && arg.path) {
@@ -79,8 +111,9 @@ app.controller('documentListController', function($scope, $mdDialog) {
                ipcRenderer.send('saveListExcel', saveArg);
             }
           //$scope.status = 'You said the information was "' + answer + '".';
-        }, function() {
-          //$scope.status = 'You cancelled the dialog.';
+        }, function(err) {
+            console.error(err);
+          
         });
       };
 
@@ -98,7 +131,6 @@ app.controller('documentListController', function($scope, $mdDialog) {
         };
     
         $scope.save = function() {
-          console.log('args', $scope.saveParameters)
           $mdDialog.hide($scope.saveParameters);
         };
       }

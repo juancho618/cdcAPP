@@ -23,8 +23,8 @@
             <div>
                 <h4>{{vm.fileList.length}} files found</h4>
             </div>           
-            <md-list-item class="md-3-line" ng-repeat="file in vm.fileList" ng-click="null">
-                <md-button class="md-fab md-mini" ng-disabled="true"> 
+            <md-list-item class="md-3-line" ng-repeat="file in vm.tempList " ng-click="vm.openFile(file)">
+                <md-button class="md-fab md-mini"  ng-disabled="true"> 
                     <md-icon md-font-icon="{{file.icon}}"></md-icon>
                 </md-button>
                 <div class="md-list-item-text" layout="column">

@@ -20,6 +20,11 @@ ipcMain.on('getFilesInDirectory', (event,arg) => {
   event.sender.send('getFilesInDirectory-response', dir.files);  
 });
 
+//Open folder
+ipcMain.on('openDocument', (event, arg) => {
+  require('child_process').exec(`start "" "${arg}"`);
+});
+
 //save the list of documents as an Excel file
 ipcMain.on('saveListExcel', (event,arg) => {
   console.log('received data', arg);
