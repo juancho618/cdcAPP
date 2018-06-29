@@ -14,7 +14,7 @@ class Directory {
             return {
                 name: file,
                 stats: stats, 
-                ext: ext ? ext : 'directory'
+                ext: ext ? ext.toLowerCase() : 'directory'
             }
         })
     }

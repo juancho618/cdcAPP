@@ -3,6 +3,7 @@ const {app, BrowserWindow, ipcMain} = require('electron');
 
 const path = require('path');
 const url = require('url');
+const fs = require('fs');
 
 const directory = require('./app/modules/directory');
 const excel = require('./app/modules/excel');
@@ -11,6 +12,15 @@ const excel = require('./app/modules/excel');
 ipcMain.on('asynchronous-message', (event, arg) => {
   console.log(arg) // prints "ping"
   event.sender.send('asynchronous-reply', 'pong')
+})
+
+//Rename the folders and files
+ipcMain.on('renameDocument', (event, arg) => {
+  console.log(arg);
+  fs.rename(`${arg.path}/${arg.old}`,`${arg.path}/${arg.new}`, (err) => {
+    if (err) throw err;
+    console.log('Rename complete!');
+  })
 })
 
 //To get the list of documents in a durectory
@@ -45,7 +55,7 @@ function createWindow () {
   mainWindow.loadFile('./app/documentsList.html')
 
   // Open the DevTools.
-   mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed',  () => {

@@ -3,6 +3,7 @@ app.controller('documentListController', function($scope, $mdDialog) {
     self.fileList = [];
     self.extensionList = [];
     const { ipcRenderer } = require('electron');
+    const Swal = require('sweetalert2')
 
     ipcRenderer.on('getFilesInDirectory-response', (event, arg) => {       
         $scope.$apply(function(){
@@ -54,19 +55,58 @@ app.controller('documentListController', function($scope, $mdDialog) {
         })
     }
 
-    self.listChange = (list) =>{
-        self.tempList  = self.fileList.filter(file => list.includes(file.ext));
+    self.renameFile = (file) => {
+            let currentFile = file;
+
+            const confirm = $mdDialog.prompt()
+            .title('Rename File')
+            .textContent(`The current name is: ${file.name}`)
+            .placeholder('New name')
+            .ariaLabel('New name')                        
+            .required(true)
+            .ok('Rename!')
+            .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function(result) {
+            console.log('this is the result ', result)
+            const rename = {
+                old: currentFile.name,
+                new: result,
+                path: self.path
+            }
+            console.log(rename);
+            if (rename.old == rename.new) {
+                console.log('nothing...');
+            } else {
+                console.log('renaming...');
+                ipcRenderer.send('renameDocument', rename);
+                Swal({
+                    title: 'File renamed!',
+                    text: `${rename.new}`,
+                    type: 'success',
+                    timer: 2000
+                })
+                file.name = result;
+            }
+           // $scope.status = 'You decided to name your dog ' + result + '.';
+        }, function() {
+            //Nothing Happened
+        });
+    }
+
+    self.listChange = () =>{
+        self.tempList  = self.fileList.filter(file => self.tempExtensionList.includes(file.ext));
+    }
+
+    self.containsChange = () => {
+        self.listChange();
+        self.tempList = self.tempList.filter(file => file.name.toLowerCase().includes(`${self.contains.toLowerCase()}`));
     }
 
     self.openFile =  (file) =>{
         if (file){
             //self.openLoading();
-            console.log('opening a file', file);
-            if (file.ext == 'directory'){
-                 ipcRenderer.send('openDocument', self.path);
-            } else {
-                 ipcRenderer.send('openDocument', `${self.path}/${file.name}`);
-            }
+            ipcRenderer.send('openDocument', `${self.path}/${file.name}`);
             
         }       
     }
@@ -109,6 +149,12 @@ app.controller('documentListController', function($scope, $mdDialog) {
                    list: dataList
                };
                ipcRenderer.send('saveListExcel', saveArg);
+               Swal({
+                title: 'File saved!',
+                text: `Saved as ${saveArg.name} in ${saveArg.path}`,
+                type: 'success',
+                timer: 4000
+            })
             }
           //$scope.status = 'You said the information was "' + answer + '".';
         }, function(err) {

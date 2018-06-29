@@ -18,7 +18,6 @@ app.controller('indexCtrl',[ 'importMatrix', 'createAssignorList', 'createPreAss
         result = importMatrix.end();
         if (result == 1){
             console.log('hola');
-            // self.switchLoad(); 
         }
     }; 
 

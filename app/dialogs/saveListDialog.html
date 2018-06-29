@@ -1,5 +1,5 @@
 <md-dialog aria-label="save">
-    <div layout="column" flex>
+    <form style="width: 58vw;">
         <md-toolbar>
             <div class="md-toolbar-tools">
                 <h2>Save list as Excel</h2>
@@ -9,16 +9,21 @@
                 </md-button>
             </div>
         </md-toolbar>
-        <md-dialog-content layout="column">
-            <md-input-container>
-                <label>File name</label>
-                <input ng-model="saveParameters.name">
-            </md-input-container>
-            <md-input-container>
-                <label>Save in (path)</label>
-                <input ng-model="saveParameters.path">
-            </md-input-container>
-            <md-button class="md-primary md-raised" ng-click="save()">Save</md-button>
+        <md-dialog-content style="max-width:800px; max-height:810px; overflow-x: hidden; padding: 5px;">
+            <div layout="column">
+                <md-input-container flex>
+                    <label>File name</label>
+                    <input ng-model="saveParameters.name">
+                </md-input-container>
+                <md-input-container>
+                    <label>Save in (path)</label>
+                    <input ng-model="saveParameters.path">
+                </md-input-container>                
+            </div>
+
         </md-dialog-content>
-    </div>
+        <md-dialog-actions layout="row">
+                <md-button layout-align="center center" class="md-primary md-raised" ng-click="save()">Save</md-button>
+        </md-dialog-actions>
+    </form>
 </md-dialog>
