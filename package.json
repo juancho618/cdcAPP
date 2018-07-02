@@ -29,6 +29,7 @@
     "angular-material": "^1.1.6",
     "animate": "^1.0.0",
     "font-awesome": "^4.7.0",
+    "html-pdf": "^2.2.0",
     "json2xls": "^0.1.2",
     "sweetalert2": "^7.24.3",
     "xlsx": "^0.13.1"

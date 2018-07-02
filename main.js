@@ -7,6 +7,7 @@ const fs = require('fs');
 
 const directory = require('./app/modules/directory');
 const excel = require('./app/modules/excel');
+const file = require('./app/modules/file');
 
 //TODO: to be deleted
 ipcMain.on('asynchronous-message', (event, arg) => {
@@ -42,6 +43,14 @@ ipcMain.on('saveListExcel', (event,arg) => {
   exc.saveList(arg);  
   //vent.sender.send('saveListExcel-response', 'done');  
 });
+
+// Convert a list of htmlfiles to PDF
+// ipcMain.on('htmlToPDF', (event, htmlList) => {
+//     const file = new file();
+//     htmlList.forEach( html => {
+//         file.htmlToPdf(`${html.path}/${html.name}`);
+//     });
+// });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.

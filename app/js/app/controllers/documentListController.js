@@ -31,7 +31,26 @@ app.controller('documentListController', function($scope, $mdDialog) {
 
     }
 
-    
+    //--------------HTML TO PDF---------------------
+        
+        self.htmlToPDF = (list) => {
+            
+            if (list) {
+                const htmlFileList = list.filter(file => file.name.includes('.html'));
+                console.log('list', htmlFileList);
+                if (htmlFileList.length > 0) {
+                    // ipcRenderer.send('htmlToPDF', htmlFileList);
+                } else {
+                    Swal({
+                        title: 'Error',
+                        text: 'Could not find any html file in the list',
+                        type: 'error',
+                        timer: 3000
+                    })
+                }
+            }            
+        }
+    //-----------------------------------------------
 
 
 
@@ -59,6 +78,18 @@ app.controller('documentListController', function($scope, $mdDialog) {
         });
         
     }
+
+    // Removes one element from the selected list
+    self.removeElement = (file) => {
+        const fileIndex = self.selectedList.indexOf(file);
+        if ( fileIndex >= 0 ) {
+            console.log('this is the file index', fileIndex);
+            self.selectedList.splice(fileIndex, 1);
+        }
+        
+        
+    }
+
 
     //---------------------------- End Selection list functions ----------------------------
 
@@ -180,7 +211,7 @@ app.controller('documentListController', function($scope, $mdDialog) {
         })
         .then(function(arg) {
             if (arg.name && arg.path) {
-               const dataList =  self.fileList.map(file => {return {'file_name': file.name, 'file_ext': file.ext}});
+               const dataList =  self.selectedList.map(file => {return {'file_name': file.name, 'file_ext': file.ext}});
                const saveArg = {
                    name: arg.name,
                    path: arg.path,

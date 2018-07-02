@@ -31,13 +31,30 @@
         </md-chips>
         <md-button class="md-primary md-raised" ng-click="vm.getDocumentsList()">Get list of documents</md-button>
         <md-button ng-show="vm.tempList.length > 0" class="md-primary md-raised" ng-click="vm.saveList()">Save list as an Excel file</md-button>
-        <div ng-show="vm.tempList.length > 0">
-            <h4>{{vm.tempList.length}} {{vm.tempList.length == 1 ? "file" : "files"}} found</h4>
-        </div>
         <div layout="row">
-            <md-button class="md-raised md-primary" ng-click="vm.selectCurrentList()">
-                <md-icon md-font-icon="fas fa-clipboard-check"></md-icon> Select current filter
-            </md-button>
+            <div ng-show="vm.tempList.length > 0" flex="{{vm.selectedList.length > 0 ? 66 : 100}}">
+                <h4>{{vm.tempList.length}} {{vm.tempList.length == 1 ? "file" : "files"}} found</h4>
+            </div>
+            <div ng-show="vm.selectedList.length > 0" flex="{{vm.selectedList.length > 0 ? 33 : 0}}">
+                <h4>{{vm.selectedList.length}} {{vm.selectedList.length == 1 ? "file" : "files"}} included in the list</h4>
+            </div>
+        </div>
+
+        <div layout="row">
+            <div flex="{{vm.selectedList.length > 0 ? 66: 100}}">
+                <md-button class="md-raised md-primary" ng-click="vm.selectCurrentList()">
+                    <md-icon md-font-icon="fas fa-clipboard-check"></md-icon> Select current filter
+                </md-button>
+            </div>
+
+            <div layout="row" ng-show="vm.selectedList.length > 0" flex="{{vm.selectedList.length > 0 ? 33 : 0}}">
+                <h3>Selected List</h3>
+                <span flex></span>
+                <md-button class="md-fab md-mini md-warn" ng-click="vm.clearAll()">
+                    <md-tooltip md-direction="top">Clear all</md-tooltip>
+                    <md-icon md-font-icon="fas fa-times"></md-icon>
+                </md-button>
+            </div>
         </div>
         <div layout="row">
             <md-list flex="{{vm.selectedList.length > 0 ? 66 : 100}}">
@@ -61,14 +78,6 @@
                 </md-list-item>
             </md-list>
             <div flex="{{vm.selectedList.length > 0 ? 33 : 0}}" layout="column">
-                <div layout="row">
-                    <h3>Selected List</h3>
-                    <span flex></span>
-                    <md-button class="md-fab md-mini md-warn" ng-click="vm.clearAll()">
-                        <md-tooltip md-direction="top">Clear all</md-tooltip>
-                        <md-icon md-font-icon="fas fa-times"></md-icon>
-                    </md-button>
-                </div>
 
                 <md-list>
                     <md-list-item layout="row" ng-repeat="selectedFile in vm.selectedList ">
@@ -79,7 +88,7 @@
                             <h3>{{ selectedFile.name }}</h3>
                         </div>
                         <span flex></span>
-                        <md-button class="md-fab md-mini md-warn" ng-click="removeElement()">
+                        <md-button class="md-fab md-mini md-warn" ng-click="vm.removeElement(selectedFile)">
                             <md-tooltip md-direction="top">Remove</md-tooltip>
                             <md-icon md-font-icon="fas fa-trash-alt"></md-icon>
                         </md-button>
