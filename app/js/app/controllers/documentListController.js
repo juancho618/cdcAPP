@@ -2,6 +2,8 @@ app.controller('documentListController', function($scope, $mdDialog) {
     let self = this;
     self.fileList = [];
     self.extensionList = [];
+    self.selectedList = []; 
+    
     const { ipcRenderer } = require('electron');
     const Swal = require('sweetalert2')
 
@@ -20,6 +22,45 @@ app.controller('documentListController', function($scope, $mdDialog) {
             ipcRenderer.send('getFilesInDirectory', self.path);
         }        
     };
+
+    self.getExtlist = ()=> {
+        const extList = new Set(self.extensionList);
+        const selectedList =  new Set(self.tempExtensionList);
+        const difference = [...extList].filter(x => !selectedList.has(x));
+        return difference;
+
+    }
+
+    
+
+
+
+    //------------------------------------- Selected list functions! ----------------------
+
+    // Clear the selected list 
+    self.clearAll = () => {
+        self.selectedList.length = 0;
+    }
+
+    // Add element to the selection list
+    self.addFile = (file) => {
+        console.log('file', file);
+        if (!self.selectedList.includes(file)){
+            self.selectedList.push(file);    
+        }        
+    }
+
+    // Creates a secondary selected list of elemets selected to be used by other functions.
+    self.selectCurrentList = () =>{        
+        self.tempList.forEach(file => {
+            if (!self.selectedList.includes(file)) {
+                self.selectedList.push(file);
+            }
+        });
+        
+    }
+
+    //---------------------------- End Selection list functions ----------------------------
 
     //Function for the button that creates the list of files as an Excel file.
     self.saveList = () => {        
@@ -68,17 +109,13 @@ app.controller('documentListController', function($scope, $mdDialog) {
             .cancel('Cancel');
 
         $mdDialog.show(confirm).then(function(result) {
-            console.log('this is the result ', result)
             const rename = {
                 old: currentFile.name,
                 new: result,
                 path: self.path
             }
-            console.log(rename);
             if (rename.old == rename.new) {
-                console.log('nothing...');
             } else {
-                console.log('renaming...');
                 ipcRenderer.send('renameDocument', rename);
                 Swal({
                     title: 'File renamed!',
@@ -110,6 +147,7 @@ app.controller('documentListController', function($scope, $mdDialog) {
             
         }       
     }
+    // TODO: toeb deleted!!
     self.greet = () => {
         console.log('hey there');
     }

@@ -13,37 +13,82 @@
             <label>Directory Path</label>
             <input ng-model="vm.path">
         </md-input-container>
-        <md-input-container  ng-show="vm.tempList.length > 0">
-                <label>Contains</label>
-                <input ng-model="vm.contains" ng-change="vm.containsChange()">
-            </md-input-container>
-        <md-chips ng-show="vm.tempList.length > 0" ng-model="vm.tempExtensionList" name="extensionList" readonly="false" ng-change="vm.listChange()" md-removable="true" md-max-chips="5">
+        <md-input-container ng-show="vm.tempList.length > 0">
+            <label>Contains</label>
+            <input ng-model="vm.contains" ng-change="vm.containsChange()">
+        </md-input-container>
+        <md-chips ng-show="vm.tempList.length > 0" ng-model="vm.tempExtensionList" name="extensionList" readonly="false" ng-change="vm.listChange()"
+            md-removable="true" md-max-chips="5">
+            <md-autocomplete md-selected-item="selectedItem" md-search-text="searchText" md-items="item in vm.getExtlist()" md-item-text="item.display">
+                <span md-highlight-text="searchText">{{item}}</span>
+                <md-not-found>
+                    No matches found.
+                </md-not-found>
+            </md-autocomplete>
             <md-chip-template>
                 <strong>{{$chip}}</strong>
             </md-chip-template>
         </md-chips>
         <md-button class="md-primary md-raised" ng-click="vm.getDocumentsList()">Get list of documents</md-button>
-        <md-button  ng-show="vm.tempList.length > 0" class="md-primary md-raised" ng-click="vm.saveList()">Save list as an Excel file</md-button>
-        <md-list flex>
-            <div ng-show="vm.tempList.length > 0">
-                <h4>{{vm.tempList.length}} {{vm.tempList.length == 1 ? "file" : "files"}} found</h4>
-            </div>           
-            <md-list-item  layput="row"  ng-repeat="file in vm.tempList " >
-                <md-button class="md-fab md-mini"  ng-disabled="true"> 
-                    <md-icon md-font-icon="{{file.icon}}"></md-icon>
-                </md-button>
-                <div   class="md-list-item-text" layout="column">
-                    <h3>{{ file.name }}</h3>
-                </div>
-                <span flex></span>
-                <md-button class="md-raised md-primary" ng-click="vm.openFile(file)">
-                    <md-icon md-font-icon="fas fa-external-link-square-alt"></md-icon> Open
-                </md-button>
-                <md-button ng-click="vm.renameFile(file)">
+        <md-button ng-show="vm.tempList.length > 0" class="md-primary md-raised" ng-click="vm.saveList()">Save list as an Excel file</md-button>
+        <div ng-show="vm.tempList.length > 0">
+            <h4>{{vm.tempList.length}} {{vm.tempList.length == 1 ? "file" : "files"}} found</h4>
+        </div>
+        <div layout="row">
+            <md-button class="md-raised md-primary" ng-click="vm.selectCurrentList()">
+                <md-icon md-font-icon="fas fa-clipboard-check"></md-icon> Select current filter
+            </md-button>
+        </div>
+        <div layout="row">
+            <md-list flex="{{vm.selectedList.length > 0 ? 66 : 100}}">
+                <md-list-item layout="row" ng-repeat="file in vm.tempList ">
+                    <md-button class="md-fab md-mini" ng-disabled="true">
+                        <md-icon md-font-icon="{{file.icon}}"></md-icon>
+                    </md-button>
+                    <div class="md-list-item-text" layout="column">
+                        <h3>{{ file.name }}</h3>
+                    </div>
+                    <span flex></span>
+                    <md-button class="md-raised md-primary" ng-click="vm.openFile(file)">
+                        <md-icon md-font-icon="fas fa-external-link-square-alt"></md-icon> Open
+                    </md-button>
+                    <md-button ng-click="vm.renameFile(file)">
                         <md-icon md-font-icon="fas fa-pencil-alt"></md-icon> Rename
-                </md-button>
-            </md-list-item>
-        </md-list>
+                    </md-button>
+                    <md-button class="md-raised md-primary" ng-click="vm.addFile(file)">
+                        <md-icon md-font-icon="fas fa-plus"></md-icon> ADD
+                    </md-button>
+                </md-list-item>
+            </md-list>
+            <div flex="{{vm.selectedList.length > 0 ? 33 : 0}}" layout="column">
+                <div layout="row">
+                    <h3>Selected List</h3>
+                    <span flex></span>
+                    <md-button class="md-fab md-mini md-warn" ng-click="vm.clearAll()">
+                        <md-tooltip md-direction="top">Clear all</md-tooltip>
+                        <md-icon md-font-icon="fas fa-times"></md-icon>
+                    </md-button>
+                </div>
+
+                <md-list>
+                    <md-list-item layout="row" ng-repeat="selectedFile in vm.selectedList ">
+                        <md-button class="md-fab md-mini" ng-disabled="true">
+                            <md-icon md-font-icon="{{selectedFile.icon}}"></md-icon>
+                        </md-button>
+                        <div class="md-list-item-text" layout="column">
+                            <h3>{{ selectedFile.name }}</h3>
+                        </div>
+                        <span flex></span>
+                        <md-button class="md-fab md-mini md-warn" ng-click="removeElement()">
+                            <md-tooltip md-direction="top">Remove</md-tooltip>
+                            <md-icon md-font-icon="fas fa-trash-alt"></md-icon>
+                        </md-button>
+                    </md-list-item>
+                </md-list>
+            </div>
+
+        </div>
+
     </div>
     <ng-include src="'_scripts.html'"></ng-include>
     <script src="../node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
