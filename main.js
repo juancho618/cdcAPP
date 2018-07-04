@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 
 
 const path = require('path');
@@ -8,6 +8,7 @@ const fs = require('fs');
 const directory = require('./app/modules/directory');
 const excel = require('./app/modules/excel');
 const file = require('./app/modules/file');
+const Matrix = require('./app/modules/matrix');
 
 //TODO: to be deleted
 ipcMain.on('asynchronous-message', (event, arg) => {
@@ -15,20 +16,50 @@ ipcMain.on('asynchronous-message', (event, arg) => {
   event.sender.send('asynchronous-reply', 'pong')
 })
 
+//Download Trucks Matrix
+let importMatrix = () => {
+  const matrix = new Matrix();
+  return matrix.importMatrix();
+}
+ipcMain.on('importTrucksMatrix', (event, arg) => {
+  importMatrix();
+});
+
+
+//Rename with python
+ipcMain.on('rename', (event, arg) => {
+  importMatrix();
+  console.log('list', arg.renameVarList)
+  const spawn = require("child_process").spawn;
+  const pythonProcess = spawn('python', ["./app/python_scripts/renaming.py", arg.path, JSON.stringify(arg.renameVarList)]);
+
+  pythonProcess.stdout.on('data', function (data) {
+    console.log(`This is the incoming data: ${data}`)
+  });
+})
+
+//Get matrix headers
+ipcMain.on('matrixHeaders', (event, arg) =>{
+  const matrix = new Matrix();
+  const headersList = matrix.getHeaders();
+  event.returnValue = headersList;
+
+})
+
 //Rename the folders and files
 ipcMain.on('renameDocument', (event, arg) => {
   console.log(arg);
-  fs.rename(`${arg.path}/${arg.old}`,`${arg.path}/${arg.new}`, (err) => {
+  fs.rename(`${arg.path}/${arg.old}`, `${arg.path}/${arg.new}`, (err) => {
     if (err) throw err;
     console.log('Rename complete!');
   })
 })
 
 //To get the list of documents in a durectory
-ipcMain.on('getFilesInDirectory', (event,arg) => {  
+ipcMain.on('getFilesInDirectory', (event, arg) => {
   const dir = new directory();
-  dir.read(arg);  
-  event.sender.send('getFilesInDirectory-response', dir.files);  
+  dir.read(arg);
+  event.sender.send('getFilesInDirectory-response', dir.files);
 });
 
 //Open folder
@@ -37,12 +68,24 @@ ipcMain.on('openDocument', (event, arg) => {
 });
 
 //save the list of documents as an Excel file
-ipcMain.on('saveListExcel', (event,arg) => {
+ipcMain.on('saveListExcel', (event, arg) => {
   console.log('received data', arg);
   const exc = new excel();
-  exc.saveList(arg);  
+  exc.saveList(arg);
   //vent.sender.send('saveListExcel-response', 'done');  
 });
+
+ipcMain.on('loadView', (event, arg) => {
+  switch (arg) {
+    case 'rename':
+      mainWindow.loadFile('./app/rename.html')
+      break;
+    default:
+      mainWindow.loadFile('./app/documentsList.html');
+      break;
+  }
+  
+})
 
 // Convert a list of htmlfiles to PDF
 // ipcMain.on('htmlToPDF', (event, htmlList) => {
@@ -52,13 +95,14 @@ ipcMain.on('saveListExcel', (event,arg) => {
 //     });
 // });
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({ width: 800, height: 600 })
 
   //load the file
   mainWindow.loadFile('./app/documentsList.html')
@@ -67,7 +111,7 @@ function createWindow () {
   mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
-  mainWindow.on('closed',  () => {
+  mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -75,6 +119,7 @@ function createWindow () {
   })
 
 }
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

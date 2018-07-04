@@ -8,7 +8,7 @@
 
 <body ng-app="cdcAPP">
     <div ng-controller="documentListController as vm" layout="column">
-        <ng-include src="'./partials/_nav.html'"></ng-include>
+        <nav-app></nav-app>
         <md-input-container>
             <label>Directory Path</label>
             <input ng-model="vm.path">
@@ -31,6 +31,7 @@
         </md-chips>
         <md-button class="md-primary md-raised" ng-click="vm.getDocumentsList()">Get list of documents</md-button>
         <md-button ng-show="vm.tempList.length > 0" class="md-primary md-raised" ng-click="vm.saveList()">Save list as an Excel file</md-button>
+        <md-button  class="md-primary md-raised" ng-click="vm.getMatrixHeaders()">Get matrix headers</md-button>
         <div layout="row">
             <div ng-show="vm.tempList.length > 0" flex="{{vm.selectedList.length > 0 ? 66 : 100}}">
                 <h4>{{vm.tempList.length}} {{vm.tempList.length == 1 ? "file" : "files"}} found</h4>
@@ -99,7 +100,7 @@
         </div>
 
     </div>
-    <ng-include src="'_scripts.html'"></ng-include>
+    <!-- <ng-include src="'./partials/_scripts.html'"></ng-include> -->
     <script src="../node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
     <script src="../node_modules/angular/angular.js"></script>
     <script src="../node_modules/angular-aria/angular-aria.js"></script>
@@ -107,6 +108,7 @@
     <script src="../node_modules/angular-material/angular-material.js"></script>
     <script src="./js/app/app.js"></script>
     <script src="./js/app/controllers/documentListController.js"></script>
+    <script src="./js/app/components/nav/nav.js"></script>
     <!-- <script src=".../node_modules/@fortawesome/fontawesome/index.js"></script> -->
 </body>
 

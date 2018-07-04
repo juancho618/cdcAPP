@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="../node_modules/angular-material/angular-material.css">
+    <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.css" />
+</head>
+
+<body ng-app="cdcAPP">
+    <form name='renameForm' ng-controller="renameController as vm" layout="column" ng-cloak>
+        <nav-app></nav-app>
+        <md-input-container>
+            <label>Directory Path</label>
+            <input required ng-model="vm.path">
+        </md-input-container>
+        <md-chips  ng-model="vm.nameFormatList" name="nameFormat" readonly="false" ng-change=""
+                md-removable="true" >
+                <md-autocomplete required  md-clear-button="true" md-selected-item="selectedItem" md-search-text="searchText" md-items="item in vm.matrixColumns" md-item-text="item.display">
+                    <span md-highlight-text="searchText" >{{item}}</span>
+                    <md-not-found>
+                        No matches found.
+                    </md-not-found>
+                </md-autocomplete>
+                <md-chip-template>
+                    <strong>{{$chip}}</strong>
+                </md-chip-template>
+            </md-chips>
+        <md-button  class="md-primary md-raised" ng-click="vm.rename()">Rename from python</md-button>
+        </form>
+    <script src="../node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="../node_modules/angular-aria/angular-aria.js"></script>
+    <script src="../node_modules/angular-animate/angular-animate.js"></script>
+    <script src="../node_modules/angular-material/angular-material.js"></script>
+    <script src="./js/app/app.js"></script>
+    <script src="./js/app/controllers/renameController.js"></script>
+    <script src="./js/app/components/nav/nav.js"></script>
+</body>
+
+</html>

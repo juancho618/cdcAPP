@@ -5,7 +5,7 @@ app.controller('documentListController', function($scope, $mdDialog) {
     self.selectedList = []; 
     
     const { ipcRenderer } = require('electron');
-    const Swal = require('sweetalert2')
+    const Swal = require('sweetalert2');
 
     ipcRenderer.on('getFilesInDirectory-response', (event, arg) => {       
         $scope.$apply(function(){
@@ -30,6 +30,16 @@ app.controller('documentListController', function($scope, $mdDialog) {
         return difference;
 
     }
+
+
+        //------ Read Matrix -------------------------------------
+
+        self.getMatrixHeaders = () => {
+            const martrixColumns = ipcRenderer.sendSync('matrixHeaders', '');
+            console.log(martrixColumns);
+        }
+        //-------------------------------------------------------
+        
 
     //--------------HTML TO PDF---------------------
         
