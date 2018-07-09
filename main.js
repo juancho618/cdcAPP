@@ -36,10 +36,15 @@ ipcMain.on('rename', (event, arg) => {
   pythonProcess.stdout.on('data', function (data) {
     console.log(`This is the incoming data: ${data}`)
   });
+
+  pythonProcess.stderr.on('data', (data) => {
+    console.log(`something went wrong: ${data}`);
+});
 })
 
 //Get matrix headers
 ipcMain.on('matrixHeaders', (event, arg) =>{
+  importMatrix();
   const matrix = new Matrix();
   const headersList = matrix.getHeaders();
   event.returnValue = headersList;
