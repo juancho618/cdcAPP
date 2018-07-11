@@ -1,11 +1,19 @@
-app.controller('renameController', function ($scope, $mdDialog) {
+app.controller('renameController', function ($scope, $mdDialog, cfpLoadingBar) {
     let self = this;
 
     const { ipcRenderer } = require('electron');
     const Swal = require('sweetalert2');
 
     ipcRenderer.on('renaming-asynchReply', function(event, arg){
-        console.log(`argument: ${arg}`);
+        const response = JSON.parse(arg);
+        cfpLoadingBar.complete();
+        const numberFilesRenamed = response.documents_tobe_renamed.length
+        Swal({
+            title: 'Files renamed!',
+            text: `${numberFilesRenamed} files were renamed, ${response.documents_wo_id.length} documents without ID and ${response.documents_wo_vat_match.length} without a VAT that matches`,
+            type: 'success',
+        })
+        console.log(`argument: ${response}`, response);
     } )
 
    self.nameFormatList = [];

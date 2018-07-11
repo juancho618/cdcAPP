@@ -1,1 +1,1 @@
-let app = angular.module("cdcAPP", [ 'ngMaterial' ]);
+let app = angular.module("cdcAPP", [ 'ngMaterial', 'cfp.loadingBar' ]);

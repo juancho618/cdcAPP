@@ -229,11 +229,11 @@ app.controller('documentListController', function($scope, $mdDialog) {
                };
                ipcRenderer.send('saveListExcel', saveArg);
                Swal({
-                title: 'File saved!',
-                text: `Saved as ${saveArg.name} in ${saveArg.path}`,
-                type: 'success',
-                timer: 4000
-            })
+                   title: 'File saved!',
+                   text: `Saved as ${saveArg.name} in ${saveArg.path}`,
+                   type: 'success',
+                   timer: 4000
+               })
             }
           //$scope.status = 'You said the information was "' + answer + '".';
         }, function(err) {
