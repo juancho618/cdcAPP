@@ -4,6 +4,10 @@ app.controller('renameController', function ($scope, $mdDialog) {
     const { ipcRenderer } = require('electron');
     const Swal = require('sweetalert2');
 
+    ipcRenderer.on('renaming-asynchReply', function(event, arg){
+        console.log(`argument: ${arg}`);
+    } )
+
    self.nameFormatList = [];
 
     //----------------Rename files with python---------------
@@ -14,6 +18,7 @@ app.controller('renameController', function ($scope, $mdDialog) {
             path: self.path,
             renameVarList: variablesNameList
         };
+        cfpLoadingBar.start();
         ipcRenderer.send('rename', renameArg);
     }
 

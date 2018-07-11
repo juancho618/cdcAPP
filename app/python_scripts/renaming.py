@@ -63,7 +63,7 @@ documents_wo_vat_match = []
 for i in range(len(pdfList)):
     id_number = getNumberID(pdfList[i])
     if id_number:
-        documents_tobe_renamed.append({'id': id_number, 'name': pdfList[i] })
+        documents_tobe_renamed.append({"id": id_number, "name": pdfList[i] })
     else:
         documents_wo_id.append(pdfList[i]) 
 
@@ -71,37 +71,16 @@ for i in range(len(pdfList)):
 
 # For every element that has to be renamed will searc for the match in the VAT
 for doc in documents_tobe_renamed:
+    found = False
     for i, vat in enumerate(vatList):
         if doc['id'] in vat:           
             doc['position'] = i
             new_name = new_name_format(i, variableNameList )
-            print(doc['name'], new_name)
             shutil.copyfile('{0}/{1}'.format(source_directory, doc['name']),'{0}/results/{1}'.format(source_directory,new_name))
-        else:
-            documents_wo_vat_match.append(doc)
+            found = True
+    if found == False:
+        documents_wo_vat_match.append(doc)
 documents_tobe_renamed = list(filter(lambda doc :  'position' in doc, documents_tobe_renamed ))
-
-#create the structure of the new name
-# listWithRenamedNames=[]
-# for i, vatList in enumerate(vatList):
-#     pass
-# for i in range(0,len(name)):
-#     outputName=str(int(assnr[i]))+'-' + str(name[i]) + '_' + str(vat[i]) + '_' + 'sinv.pdf'
-#     listWithRenamedNames.append(outputName)
-
-
-
-# # main part where the renaming happens
-# for i in range(0,len(pdfList)):
-#     for j in range(0,len(vat)):
-#         if vat[j] in pdfList[i]:
-#             for k in range(0, len(listWithRenamedNames)):
-#                 if vat[j] in listWithRenamedNames[k]:
-#                     shutil.move('{}'.format(pdfList[i]),'{}'.format(listWithRenamedNames[k]))
-
-
-
-
-# print('renaming completed')
-
+response = '{{"documents_wo_id": {0}, "documents_tobe_renamed": {1}, "documents_wo_vat_match":{2}}}'.format(documents_wo_id, documents_tobe_renamed, documents_wo_vat_match)
+print(response)
 sys.stdout.flush()

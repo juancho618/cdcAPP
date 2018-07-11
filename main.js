@@ -29,13 +29,24 @@ ipcMain.on('importTrucksMatrix', (event, arg) => {
 //Rename with python
 ipcMain.on('rename', (event, arg) => {
   importMatrix();
+  let dataString = ''; 
   console.log('list', arg.renameVarList)
   const spawn = require("child_process").spawn;
   const pythonProcess = spawn('python', ["./app/python_scripts/renaming.py", arg.path, JSON.stringify(arg.renameVarList)]);
 
   pythonProcess.stdout.on('data', function (data) {
-    console.log(`This is the incoming data: ${data}`)
+    dataString += data.toString();
   });
+
+  pythonProcess.stdout.on('end', function(){
+    let dataObj = dataString;
+    dataObj = dataObj.replace(/'/g, '"');
+    event.sender.send('renaming-asynchReply', dataObj);
+    fs.writeFile('message.json', dataObj, (err) => {
+      if (err) throw err;
+      console.log('The file has been saved!');
+    });
+  })
 
   pythonProcess.stderr.on('data', (data) => {
     console.log(`something went wrong: ${data}`);
